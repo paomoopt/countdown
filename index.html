@@ -129,6 +129,51 @@
             color: #667eea;
         }
 
+        .custom-time {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .custom-time label {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .custom-time input {
+            width: 80px;
+            padding: 10px 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .custom-time button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .custom-time button:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .time-btns {
+            display: flex;
+            gap: 10px;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 24px;
@@ -161,6 +206,18 @@
         <div class="timer" id="timer">03:00</div>
     </div>
     
+    <div class="custom-time">
+        <label>设置分钟:</label>
+        <input type="number" id="timeInput" min="1" max="60" value="3">
+        <button id="setTimeBtn">设置</button>
+        <div class="time-btns">
+            <button id="btn1min">1分钟</button>
+            <button id="btn2min">2分钟</button>
+            <button id="btn3min">3分钟</button>
+            <button id="btn5min">5分钟</button>
+        </div>
+    </div>
+    
     <div class="controls">
         <button class="btn btn-primary" id="startBtn">开始</button>
         <button class="btn btn-secondary" id="pauseBtn">暂停</button>
@@ -187,10 +244,36 @@
         const pauseBtn = document.getElementById('pauseBtn');
         const resetBtn = document.getElementById('resetBtn');
         const subtitleButtons = document.querySelectorAll('.btn-subtitle');
+        const timeInput = document.getElementById('timeInput');
+        const setTimeBtn = document.getElementById('setTimeBtn');
+        const btn1min = document.getElementById('btn1min');
+        const btn2min = document.getElementById('btn2min');
+        const btn3min = document.getElementById('btn3min');
+        const btn5min = document.getElementById('btn5min');
 
         let totalSeconds = 180;
         let timer = null;
         let isRunning = false;
+
+        function setTime(minutes) {
+            stopTimer();
+            totalSeconds = minutes * 60;
+            timeInput.value = minutes;
+            timerDisplay.style.color = '#333';
+            updateTimer();
+        }
+
+        setTimeBtn.addEventListener('click', () => {
+            const minutes = parseInt(timeInput.value);
+            if (minutes >= 1 && minutes <= 60) {
+                setTime(minutes);
+            }
+        });
+
+        btn1min.addEventListener('click', () => setTime(1));
+        btn2min.addEventListener('click', () => setTime(2));
+        btn3min.addEventListener('click', () => setTime(3));
+        btn5min.addEventListener('click', () => setTime(5));
 
         function updateTimer() {
             const minutes = Math.floor(totalSeconds / 60);
